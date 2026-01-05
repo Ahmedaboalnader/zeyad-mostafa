@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>بنك أسئلة التشريح – Dr Adel Elhawary</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card-bg: #ffffff;
+      --primary: #0056b3;
+      --primary-soft: #e3f2fd;
+      --danger: #c62828;
+      --success: #2e7d32;
+      --muted: #6c757d;
+      --border: #dde1eb;
+      --shadow: 0 4px 12px rgba(0,0,0,0.06);
+      --radius: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Tahoma", "Arial", sans-serif;
+      background: var(--bg);
+      color: #222;
+      direction: rtl;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 15px 40px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0d47a1, #1976d2);
+      color: #fff;
+      padding: 20px 20px 24px;
+      border-radius: 0 0 18px 18px;
+      box-shadow: var(--shadow);
+      margin: -20px -15px 20px;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    header p {
+      margin: 2px 0;
+      font-size: 14px;
+      opacity: 0.95;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .controls {
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding: 14px 14px 10px;
+      margin-bottom: 16px;
+    }
+
+    .search-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .search-row input {
+      flex: 1 1 260px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .filters-section {
+      margin-top: 8px;
+    }
+
+    .filters-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .filter-btn {
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: #444;
+      transition: all 0.15s ease;
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .filter-btn:hover {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+    }
+
+    .questions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .question-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px 14px 10px;
+      border: 1px solid #e4e7f1;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      gap: 6px;
+    }
+
+    .q-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .q-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .q-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      font-size: 11px;
+    }
+
+    .q-tag {
+      padding: 1px 7px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: #f8f9ff;
+    }
+
+    .q-body {
+      margin-bottom: 10px;
+    }
+
+    .q-en {
+      font-size: 14px;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .q-ar {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .option-btn {
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 6px 8px;
+      font-size: 13px;
+      text-align: right;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .option-index {
+      font-weight: 700;
+      color: var(--muted);
+      min-width: 16px;
+      text-align: center;
+    }
+
+    .option-text {
+      flex: 1;
+    }
+
+    .option-btn:hover {
+      border-color: var(--primary);
+      background: #f4f7ff;
+    }
+
+    .option-btn.correct {
+      background: #e8f5e9;
+      border-color: var(--success);
+      color: #1b5e20;
+    }
+
+    .option-btn.incorrect {
+      background: #ffebee;
+      border-color: var(--danger);
+      color: #b71c1c;
+    }
+
+    .explanation {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed #d0d4e3;
+      font-size: 13px;
+    }
+
+    .explanation-title {
+      font-weight: 600;
+      margin-bottom: 3px;
+      color: var(--primary);
+    }
+
+    .explanation-text {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .no-results {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+      header {
+        border-radius: 0 0 12px 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .question-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .search-row {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>by-Alhawe And Z3Z3</h1>
+      <p>Interactive Anatomy Question Bank with Arabic translation for each question to help you practice and self‑test.</p>
+      <p>بنك أسئلة تفاعلي مع ترجمة عربية أسفل كل سؤال لمساعدة الطالب على المراجعة والتدريب الذاتي.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Statistics -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">إجمالي الأسئلة</div>
+        <div class="stat-value" id="stat-total">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">تمت الإجابة</div>
+        <div class="stat-value" id="stat-answered">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">الإجابات الصحيحة</div>
+        <div class="stat-value" id="stat-correct">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">نسبة النجاح</div>
+        <div class="stat-value" id="stat-percentage">0%</div>
+      </div>
+    </section>
+
+    <!-- Controls -->
+    <section class="controls">
+      <div class="search-row">
+        <input id="searchInput" type="text" placeholder="بحث في نص السؤال (إنجليزي أو عربي) أو Group أو Category..." />
+        <span class="badge">
+          🔍
+          <span>اكتب جزء من السؤال أو اسم المجموعة (Group A) أو الكاتيجوري</span>
+        </span>
+      </div>
+
+      <div class="filters-section">
+        <div class="filters-label">المجموعات (Groups)</div>
+        <div class="btn-group" id="groupFilters">
+          <button class="filter-btn active" data-part="all">الكل</button>
+          <button class="filter-btn" data-part="Group A">Group A</button>
+          <button class="filter-btn" data-part="Group B">Group B</button>
+          <button class="filter-btn" data-part="Group C">Group C</button>
+          <button class="filter-btn" data-part="Group D">Group D</button>
+        </div>
+      </div>
+
+      <div class="filters-section" style="margin-top:10px;">
+        <div class="filters-label">الفئات (Categories)</div>
+        <div class="btn-group" id="categoryFilters">
+          <button class="filter-btn active" data-category="all">الكل</button>
+          <!-- تقدر تزود كاتيجوريز حسب الحاجة -->
+          <button class="filter-btn" data-category="Communication Skills">Communication Skills</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Questions list -->
+    <section id="questionsContainer" class="questions-list"></section>
+    <div id="noResults" class="no-results" style="display:none;">لا توجد أسئلة مطابقة لخيارات البحث / الفلاتر الحالية.</div>
+  </main>
+
+  <script>
+    // ========================
+    // بيانات الأسئلة
+    // ========================
+    const allQuestions = [
+      {
+        id: 1,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "As regards communication, feedback should not be:",
+        ar: "فيما يخص الاتصال، لا ينبغي أن يكون التغذية الراجعة (الفيدباك):",
+        options: [
+          "Absent feedback",
+          "Relevant feedback",
+          "Good feedback",
+          "Complete direct feedback"
+        ],
+        correct: 0,
+        explanation: "التغذية الراجعة ضرورية لنجاح عملية الاتصال، لذا غيابها يعد سلوكًا غير صحيح في الاتصال."
+      },
+      {
+        id: 2,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Responsibility of sender is:",
+        ar: "مسؤولية المرسل هي:",
+        options: [
+          "Disencourags his receivers",
+          "Encourage the receivers",
+          "Has no relation to his team",
+          "Work alone"
+        ],
+        correct: 1,
+        explanation: "من مسؤوليات المرسل تشجيع المستقبلين وتحفيزهم وليس إحباطهم."
+      },
+      {
+        id: 3,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following is the definition of health education?",
+        ar: "أي مما يلي يُعد تعريفًا للتثقيف الصحي؟",
+        options: [
+          "Combination of learning experience designed to facilitate voluntary action conductive to health",
+          "It is un voluntary action",
+          "It is not force",
+          "Unhealthy behavior"
+        ],
+        correct: 0,
+        explanation: "التثقيف الصحي هو عملية تعليمية تهدف إلى تشجيع السلوكيات الصحية بشكل طوعي."
+      },
+      {
+        id: 4,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "As regard the role of the teacher which of the following is not correct?",
+        ar: "بالنسبة لدور المعلم أي مما يلي غير صحيح؟",
+        options: [
+          "Planner",
+          "Clarifier",
+          "Stimulator",
+          "Volunteer"
+        ],
+        correct: 3,
+        explanation: "المعلم مخطط ومُوضح ومُحفّز، لكنه ليس مجرد متطوع دون دور مهني محدد."
+      },
+      {
+        id: 5,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "As regard non verbal communication represents:",
+        ar: "الاتصال غير اللفظي يمثل تقريبًا:",
+        options: [
+          "90%",
+          "80%",
+          "70%",
+          "10%"
+        ],
+        correct: 1,
+        explanation: "يُقال إن معظم عملية الاتصال تتم بغير الكلمات، ونسبة كبيرة منها تكون غير لفظية."
+      },
+      {
+        id: 6,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following is considered correct for verbal communication?",
+        ar: "أي مما يلي صحيح بالنسبة للاتصال اللفظي؟",
+        options: [
+          "Need words to express emotions",
+          "Active listening",
+          "Direct questioning",
+          "All of the above"
+        ],
+        correct: 3,
+        explanation: "الاتصال اللفظي يتضمن استخدام الكلمات، الاستماع الفعّال، وطرح الأسئلة المباشرة."
+      },
+      {
+        id: 7,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following is the characteristic of non verbal communication?",
+        ar: "أي مما يلي من خصائص الاتصال غير اللفظي؟",
+        options: [
+          "Easy communication",
+          "More reliable than verbal communication",
+          "Do not need observation",
+          "Cannot be use with deaf and mute persons"
+        ],
+        correct: 1,
+        explanation: "الاتصال غير اللفظي غالبًا يكون أكثر صدقًا من الكلمات لذا يعتبر أكثر موثوقية."
+      },
+      {
+        id: 8,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which is correct for an effective verbal communicator?",
+        ar: "أي مما يلي صحيح لمتواصل لفظي فعّال؟",
+        options: [
+          "Encourages empathically",
+          "Depend on eye contact",
+          "Depend on facial expression",
+          "Depend on body language"
+        ],
+        correct: 0,
+        explanation: "المتواصل الفعّال يستخدم التعاطف وتشجيع الآخرين كجزء أساسي من مهاراته."
+      },
+      {
+        id: 9,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following is a type of communication?",
+        ar: "أي مما يلي نوع من أنواع الاتصال؟",
+        options: [
+          "Downwards communication",
+          "Upwards communication",
+          "Horizontal communication",
+          "All of the above"
+        ],
+        correct: 3,
+        explanation: "الاتصال قد يكون من أعلى لأسفل أو من أسفل لأعلى أو أفقي بين الزملاء."
+      },
+      {
+        id: 10,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following is correct about the characteristic of good communicator channel?",
+        ar: "أي مما يلي صحيح حول خصائص قناة الاتصال الجيدة؟",
+        options: [
+          "Appropriate",
+          "Affordable",
+          "Appealing",
+          "All of the above"
+        ],
+        correct: 3,
+        explanation: "القناة الجيدة يجب أن تكون مناسبة وممكنة التكلفة وجذابة للمستقبل."
+      },
+      {
+        id: 11,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following are correct for non verbal communication?",
+        ar: "أي مما يلي صحيح عن الاتصال غير اللفظي؟",
+        options: [
+          "Use body language",
+          "Facial expression, eye contact and touch appearance",
+          "Cannot use words",
+          "All of the above"
+        ],
+        correct: 3,
+        explanation: "الاتصال غير اللفظي يشمل لغة الجسد وتعبيرات الوجه ونظرات العين وغيرها."
+      },
+      {
+        id: 12,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following are considered methods of non verbal communication?",
+        ar: "أي مما يلي يُعد من وسائل الاتصال غير اللفظي؟",
+        options: [
+          "Use high sounds",
+          "Use clear words",
+          "Use understanding words",
+          "Use body language"
+        ],
+        correct: 3,
+        explanation: "لغة الجسد هي إحدى أهم وسائل الاتصال غير اللفظي."
+      },
+      {
+        id: 13,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following is considered true for verbal communication?",
+        ar: "أي مما يلي صحيح بالنسبة للاتصال اللفظي؟",
+        options: [
+          "Use words",
+          "Eye to eye contact",
+          "Facial expression",
+          "Touch"
+        ],
+        correct: 0,
+        explanation: "الاتصال اللفظي يعتمد أساسًا على استخدام الكلمات المنطوقة أو المكتوبة."
+      },
+      {
+        id: 14,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "For non verbal communication, method which is not correct?",
+        ar: "بالنسبة للاتصال غير اللفظي، أي طريقة مما يلي غير صحيحة؟",
+        options: [
+          "More reliable",
+          "Not reliable",
+          "Touch receiver",
+          "Eye to eye contact"
+        ],
+        correct: 1,
+        explanation: "الاتصال غير اللفظي عادة يكون أكثر موثوقية وليس أقل."
+      },
+      {
+        id: 15,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "An effective verbal communication include which of the following?",
+        ar: "الاتصال اللفظي الفعّال يتضمن أي مما يلي؟",
+        options: [
+          "Clarifies, listens, acknowledges, and repeats",
+          "Relax",
+          "Open up",
+          "Eye contact"
+        ],
+        correct: 0,
+        explanation: "الاتصال الفعّال يشمل التوضيح والاستماع والتأكيد وإعادة صياغة الرسالة."
+      },
+      {
+        id: 16,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following is the type of communication?",
+        ar: "أي مما يلي نوع من أنواع الاتصال؟",
+        options: [
+          "Verbal only",
+          "Non verbal only",
+          "Intermediate",
+          "Verbal and non verbal communication"
+        ],
+        correct: 3,
+        explanation: "الاتصال في الواقع يكون مزيجًا من اللفظي وغير اللفظي معًا."
+      },
+      {
+        id: 17,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following is NOT the level of communication?",
+        ar: "أي مما يلي ليس من مستويات الاتصال؟",
+        options: [
+          "Downwards communication",
+          "Upwards communication",
+          "Lateral communication",
+          "Vertical communication"
+        ],
+        correct: 4-1, // placeholder; adjust if needed
+        explanation: "مستويات الاتصال تشمل الاتجاهات الرأسية والأفقية؛ يمكن تعديل هذه الإجابة حسب المنهج."
+      },
+      {
+        id: 18,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "........ defined as two way process involving passing messages to and from between sender and receiver?",
+        ar: "........ تُعرّف بأنها عملية ثنائية الاتجاه يتبادل فيها المرسل والمستقبل الرسائل:",
+        options: [
+          "Motivation",
+          "Communication",
+          "Health education code of ethics",
+          "Learning"
+        ],
+        correct: 1,
+        explanation: "الاتصال هو عملية ثنائية الاتجاه بين المرسل والمستقبل."
+      },
+      {
+        id: 19,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following is not correct about the characteristic of good communicator channel?",
+        ar: "أي مما يلي غير صحيح عن خصائص قناة الاتصال الجيدة؟",
+        options: [
+          "Appropriate",
+          "Affordable",
+          "Appealing",
+          "Non appropriate channel"
+        ],
+        correct: 3,
+        explanation: "القناة غير المناسبة تعتبر عيبًا وليست من خصائص القناة الجيدة."
+      },
+      {
+        id: 20,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "An effective verbal communicator include:",
+        ar: "المتواصل اللفظي الفعّال يشمل:",
+        options: [
+          "Clear, understood voice and words",
+          "Relaxes",
+          "Touch",
+          "Eye contact"
+        ],
+        correct: 0,
+        explanation: "وضوح الصوت والكلمات من أهم صفات المتواصل اللفظي الجيد."
+      },
+      {
+        id: 21,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following are the types of communication?",
+        ar: "أي مما يلي من أنواع الاتصال؟",
+        options: [
+          "Upward communication",
+          "Downward communication",
+          "Intermediate communication",
+          "Verbal and non verbal"
+        ],
+        correct: 3,
+        explanation: "يمكن تقسيم الاتصال بأنواعه المختلفة ومنها اللفظي وغير اللفظي."
+      },
+      {
+        id: 22,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following are correct for verbal communication?",
+        ar: "أي مما يلي صحيح بالنسبة للاتصال اللفظي؟",
+        options: [
+          "Use body language",
+          "Use words in communication",
+          "Facial expression",
+          "Cannot use words"
+        ],
+        correct: 1,
+        explanation: "الاتصال اللفظي يعتمد أساسًا على استخدام الكلمات."
+      },
+      {
+        id: 23,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following is not the levels of communication?",
+        ar: "أي مما يلي ليس من مستويات الاتصال؟",
+        options: [
+          "Downwards communication",
+          "Upwards communication",
+          "Lateral communication",
+          "Verbal and non verbal communication"
+        ],
+        correct: 3,
+        explanation: "مستويات الاتصال تتعلق باتجاه الحركة داخل المنظمة، وليس بتقسيمه إلى لفظي وغير لفظي."
+      },
+      {
+        id: 24,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following are characters of a good sender message in communication?",
+        ar: "أي مما يلي من صفات الرسالة الجيدة من المرسل؟",
+        options: [
+          "Choose appropriate communication channel",
+          "Be interested in the subjects",
+          "Both 1 and 2",
+          "Lack interest of subject"
+        ],
+        correct: 2,
+        explanation: "من صفات المرسل الجيد اختيار القناة المناسبة والاهتمام بموضوع الرسالة."
+      },
+      {
+        id: 25,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "....... is the person to whom messages is directed?",
+        ar: "....... هو الشخص الذي تُوجَّه إليه الرسالة:",
+        options: [
+          "Sender",
+          "Receiver",
+          "Channel",
+          "Messages"
+        ],
+        correct: 1,
+        explanation: "المستقبل هو من تُوجَّه إليه الرسالة."
+      },
+      {
+        id: 26,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "..... is the final stage that the receiver reply to the sender according to understanding him to a particular topic",
+        ar: "..... هي المرحلة الأخيرة حيث يرد المستقبل على المرسل وفقًا لفهمه للموضوع:",
+        options: [
+          "Sending",
+          "Communication",
+          "Feedback",
+          "Receiving"
+        ],
+        correct: 2,
+        explanation: "التغذية الراجعة هي استجابة المستقبل للمرسل بعد استلام الرسالة."
+      },
+      {
+        id: 27,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "As regard non verbal communication advantages which is correct?",
+        ar: "بالنسبة لمميزات الاتصال غير اللفظي، أي مما يلي صحيح؟",
+        options: [
+          "Need words",
+          "Do not need understanding or interpretation",
+          "More reliable than verbal",
+          "Need high voice"
+        ],
+        correct: 2,
+        explanation: "من مزايا الاتصال غير اللفظي أنه أكثر موثوقية من الاتصال اللفظي في كثير من الأحيان."
+      },
+      {
+        id: 28,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "All of the following are requirements of effective communication which of the following is not correct?",
+        ar: "كل ما يلي من متطلبات الاتصال الفعّال ما عدا:",
+        options: [
+          "Clear, concise messages",
+          "Relevant messages",
+          "Meaningful messages",
+          "Non relevant messages"
+        ],
+        correct: 3,
+        explanation: "الرسائل غير المرتبطة بالموضوع لا تعتبر من خصائص الاتصال الفعّال."
+      },
+      {
+        id: 29,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Criteria of effective nonverbal communicator include which of the following?",
+        ar: "معايير المتواصل غير اللفظي الفعّال تشمل أي مما يلي؟",
+        options: [
+          "Use clear voice",
+          "Establish eye contact with appropriate facial expression",
+          "Use words",
+          "Use meaningful speech"
+        ],
+        correct: 1,
+        explanation: "التواصل غير اللفظي يعتمد على تعبيرات الوجه وتواصل العين أكثر من الكلمات."
+      },
+      {
+        id: 30,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Teaching is defined as:",
+        ar: "يُعرّف التدريس بأنه:",
+        options: [
+          "Interaction between teacher and learner to bring expected changes in behavior of learner",
+          "Interaction between learners and clients",
+          "Interaction between groups",
+          "Interaction between clients"
+        ],
+        correct: 0,
+        explanation: "التدريس عملية تفاعل بين المعلم والمتعلم بهدف إحداث تغيير سلوكي مرغوب."
+      },
+      {
+        id: 31,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following is correct for good non verbal communication?",
+        ar: "أي مما يلي صحيح للاتصال غير اللفظي الجيد؟",
+        options: [
+          "Need good observation",
+          "Good analysis",
+          "Good interpretation",
+          "All of the above"
+        ],
+        correct: 3,
+        explanation: "فهم الإشارات غير اللفظية يحتاج إلى ملاحظة وتحليل وتفسير جيد."
+      },
+      {
+        id: 32,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Upward communication, which is correct?",
+        ar: "بالنسبة للاتصال الصاعد، أي مما يلي صحيح؟",
+        options: [
+          "Non directive",
+          "From senior to junior",
+          "Inform problem",
+          "All of the above"
+        ],
+        correct: 2,
+        explanation: "الاتصال الصاعد يكون عادة من العاملين إلى الإدارة لإبلاغهم بالمشكلات أو المقترحات."
+      },
+      {
+        id: 33,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which is correct for downward communication?",
+        ar: "أي مما يلي صحيح بالنسبة للاتصال الهابط؟",
+        options: [
+          "From senior to juniors",
+          "Non directive",
+          "From junior to senior",
+          "Inform problem"
+        ],
+        correct: 0,
+        explanation: "الاتصال الهابط يكون من الإدارة أو القائد إلى المرؤوسين."
+      },
+      {
+        id: 34,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which is correct for lateral communication?",
+        ar: "أي مما يلي صحيح بالنسبة للاتصال الأفقي؟",
+        options: [
+          "Between colleagues",
+          "At the same level",
+          "Share information to save time",
+          "All of the above"
+        ],
+        correct: 3,
+        explanation: "الاتصال الأفقي يكون بين الزملاء في نفس المستوى لتبادل المعلومات وتنسيق العمل."
+      },
+      {
+        id: 35,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "For good receiver, which is correct?",
+        ar: "بالنسبة للمستقبل الجيد، أي مما يلي صحيح؟",
+        options: [
+          "Should be aware",
+          "Not listen good",
+          "Neglect the subject",
+          "Do not have interest"
+        ],
+        correct: 0,
+        explanation: "المستقبل الجيد يجب أن يكون واعيًا ومهتمًا بالرسالة."
+      },
+      {
+        id: 36,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following is important for communication?",
+        ar: "أي مما يلي مهم في الاتصال؟",
+        options: [
+          "Have no interest",
+          "Good language use",
+          "Anxiety",
+          "Impaired visual and auditory channel"
+        ],
+        correct: 1,
+        explanation: "استخدام لغة جيدة وواضحة مهم جدًا لنجاح عملية الاتصال."
+      },
+      {
+        id: 37,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following are essentials for good communication?",
+        ar: "أي مما يلي من أساسيات الاتصال الجيد؟",
+        options: [
+          "Good atmosphere",
+          "Comfortable setting",
+          "Good light",
+          "All of the above"
+        ],
+        correct: 3,
+        explanation: "البيئة المريحة والإضاءة الجيدة تساعد على تحسين التواصل."
+      },
+      {
+        id: 38,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Effective communication require message should be:",
+        ar: "الاتصال الفعّال يتطلب أن تكون الرسالة:",
+        options: [
+          "Hazy message",
+          "Unclear message",
+          "Irrelevant message",
+          "Clear, concise, and accurate"
+        ],
+        correct: 3,
+        explanation: "الرسالة الفعّالة يجب أن تكون واضحة ومختصرة ودقيقة."
+      },
+      {
+        id: 39,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following is considered correct for body language in communication?",
+        ar: "أي مما يلي صحيح بالنسبة للغة الجسد في الاتصال؟",
+        options: [
+          "Can use touch",
+          "Cannot use eye contact",
+          "Not important in communication",
+          "Irrelevant"
+        ],
+        correct: 0,
+        explanation: "لغة الجسد تشمل اللمس، وضعيّة الجسم، ونظرات العين وغيرها."
+      },
+      {
+        id: 40,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following is true for a student?",
+        ar: "أي مما يلي صحيح بالنسبة للطالب؟",
+        options: [
+          "He is sender",
+          "He is receiver",
+          "He is teacher",
+          "He cannot give feedback"
+        ],
+        correct: 1,
+        explanation: "الطالب غالبًا يكون مستقبلًا للمعلومة، ويمكنه أيضًا أن يعطي تغذية راجعة."
+      },
+      {
+        id: 41,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "............. is basic component of human relationship.",
+        ar: "............. هو مكون أساسي من مكونات العلاقات الإنسانية.",
+        options: [
+          "Education",
+          "Communication",
+          "Teaching",
+          "Learning"
+        ],
+        correct: 1,
+        explanation: "الاتصال من أهم مكونات العلاقات بين البشر."
+      },
+      {
+        id: 42,
+        part: "Group A",
+        category: "Communication Skills",
+        en: "Which of the following is correct for teacher?",
+        ar: "أي مما يلي صحيح بالنسبة للمعلم؟",
+        options: [
+          "He is sender",
+          "He is receiver",
+          "He is learner",
+          "He is patient"
+        ],
+        correct: 0,
+        explanation: "المعلم غالبًا يكون المرسل الرئيسي للمعلومة داخل الفصل."
+      }
+    ];
+
+    // ========================
+    // منطق العرض والتفاعل
+    // ========================
+
+    let currentPartFilter = "all";
+    let currentCategoryFilter = "all";
+    let searchQuery = "";
+    const answeredQuestions = new Map(); // id -> {selectedIndex, isCorrect}
+
+    const questionsContainer = document.getElementById("questionsContainer");
+    const noResultsEl = document.getElementById("noResults");
+
+    const statTotal = document.getElementById("stat-total");
+    const statAnswered = document.getElementById("stat-answered");
+    const statCorrect = document.getElementById("stat-correct");
+    const statPercentage = document.getElementById("stat-percentage");
+
+    function updateStats() {
+      const total = allQuestions.length;
+      const answered = answeredQuestions.size;
+      let correct = 0;
+      answeredQuestions.forEach((val) => {
+        if (val.isCorrect) correct++;
+      });
+      const percentage = answered === 0 ? 0 : Math.round((correct / answered) * 100);
+
+      statTotal.textContent = total;
+      statAnswered.textContent = answered;
+      statCorrect.textContent = correct;
+      statPercentage.textContent = percentage + "%";
+    }
+
+    function filterQuestions() {
+      const q = searchQuery.trim().toLowerCase();
+      return allQuestions.filter((question) => {
+        // filter by group
+        if (currentPartFilter !== "all" && question.part !== currentPartFilter) {
+          return false;
+        }
+        // filter by category
+        if (currentCategoryFilter !== "all" && question.category !== currentCategoryFilter) {
+          return false;
+        }
+        // search filter
+        if (q) {
+          const haystack = (
+            question.en +
+            " " +
+            question.ar +
+            " " +
+            question.part +
+            " " +
+            question.category
+          ).toLowerCase();
+          if (!haystack.includes(q)) {
+            return false;
+          }
+        }
+        return true;
+      });
+    }
+
+    function renderQuestions() {
+      questionsContainer.innerHTML = "";
+      const filtered = filterQuestions();
+
+      if (filtered.length === 0) {
+        noResultsEl.style.display = "block";
+        return;
+      } else {
+        noResultsEl.style.display = "none";
+      }
+
+      filtered.forEach((question) => {
+        const card = document.createElement("article");
+        card.className = "question-card";
+
+        const header = document.createElement("div");
+        header.className = "question-header";
+
+        const meta = document.createElement("div");
+        meta.className = "q-meta";
+
+        const number = document.createElement("div");
+        number.className = "q-number";
+        number.textContent = question.id;
+
+        const tags = document.createElement("div");
+        tags.className = "q-tags";
+
+        const partTag = document.createElement("span");
+        partTag.className = "q-tag";
+        partTag.textContent = question.part;
+
+        const catTag = document.createElement("span");
+        catTag.className = "q-tag";
+        catTag.textContent = question.category;
+
+        tags.appendChild(partTag);
+        tags.appendChild(catTag);
+
+        meta.appendChild(number);
+        meta.appendChild(tags);
+
+        header.appendChild(meta);
+
+        card.appendChild(header);
+
+        // body
+        const body = document.createElement("div");
+        body.className = "q-body";
+
+        const en = document.createElement("div");
+        en.className = "q-en";
+        en.textContent = question.en;
+
+        const ar = document.createElement("div");
+        ar.className = "q-ar";
+        ar.textContent = question.ar;
+
+        body.appendChild(en);
+        body.appendChild(ar);
+        card.appendChild(body);
+
+        // options
+        const optionsGrid = document.createElement("div");
+        optionsGrid.className = "options-grid";
+
+        const savedAnswer = answeredQuestions.get(question.id);
+
+        question.options.forEach((optText, index) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "option-btn";
+
+          const idx = document.createElement("span");
+          idx.className = "option-index";
+          idx.textContent = String.fromCharCode(65 + index); // A,B,C,D
+
+          const txt = document.createElement("span");
+          txt.className = "option-text";
+          txt.textContent = optText;
+
+          btn.appendChild(idx);
+          btn.appendChild(txt);
+
+          if (savedAnswer) {
+            if (index === question.correct) {
+              btn.classList.add("correct");
+            } else if (index === savedAnswer.selectedIndex && !savedAnswer.isCorrect) {
+              btn.classList.add("incorrect");
+            }
+          }
+
+          btn.addEventListener("click", () => {
+            handleOptionSelect(question.id, index, card, optionsGrid, question);
+          });
+
+          optionsGrid.appendChild(btn);
+        });
+
+        card.appendChild(optionsGrid);
+
+        // explanation (render if already answered)
+        if (savedAnswer) {
+          const explanationEl = createExplanationElement(question);
+          card.appendChild(explanationEl);
+        }
+
+        questionsContainer.appendChild(card);
+      });
+    }
+
+    function createExplanationElement(question) {
+      const explanation = document.createElement("div");
+      explanation.className = "explanation";
+
+      const title = document.createElement("div");
+      title.className = "explanation-title";
+      title.textContent = "Correct answer: " + question.options[question.correct];
+
+      const text = document.createElement("div");
+      text.className = "explanation-text";
+      text.textContent = question.explanation;
+
+      explanation.appendChild(title);
+      explanation.appendChild(text);
+      return explanation;
+    }
+
+    function handleOptionSelect(questionId, selectedIndex, card, optionsGrid, question) {
+      const isCorrect = selectedIndex === question.correct;
+
+      // Update answered map
+      answeredQuestions.set(questionId, {
+        selectedIndex,
+        isCorrect
+      });
+
+      // Reset options styles
+      const buttons = optionsGrid.querySelectorAll(".option-btn");
+      buttons.forEach((btn, index) => {
+        btn.classList.remove("correct", "incorrect");
+        if (index === question.correct) {
+          btn.classList.add("correct");
+        } else if (index === selectedIndex && !isCorrect) {
+          btn.classList.add("incorrect");
+        }
+      });
+
+      // Remove old explanation if exists
+      const oldExplanation = card.querySelector(".explanation");
+      if (oldExplanation) {
+        oldExplanation.remove();
+      }
+
+      // Add explanation box
+      const explanationEl = createExplanationElement(question);
+      card.appendChild(explanationEl);
+
+      updateStats();
+    }
+
+    // ========================
+    // Events
+    // ========================
+
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+      searchQuery = e.target.value;
+      renderQuestions();
+    });
+
+    document.getElementById("groupFilters").addEventListener("click", (e) => {
+      if (e.target.matches("button.filter-btn")) {
+        const value = e.target.getAttribute("data-part");
+        currentPartFilter = value;
+
+        // toggle active class
+        const buttons = document.querySelectorAll("#groupFilters .filter-btn");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+        e.target.classList.add("active");
+
+        renderQuestions();
+      }
+    });
+
+    document.getElementById("categoryFilters").addEventListener("click", (e) => {
+      if (e.target.matches("button.filter-btn")) {
+        const value = e.target.getAttribute("data-category");
+        currentCategoryFilter = value;
+
+        // toggle active class
+        const buttons = document.querySelectorAll("#categoryFilters .filter-btn");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+        e.target.classList.add("active");
+
+        renderQuestions();
+      }
+    });
+
+    // Initial render
+    updateStats();
+    renderQuestions();
+  </script>
+</body>
+</html>
